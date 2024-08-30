@@ -137,6 +137,7 @@ def test_transitive(a: float, b: float, c: float) -> None:
         assert lt(a, c)
 
 @pytest.mark.task0_2
+@given(small_floats, small_floats)
 def test_symmetric(a: float, b: float) -> None:
     """
     Write a test that ensures that :func:`minitorch.operators.mul` is symmetric, i.e.
