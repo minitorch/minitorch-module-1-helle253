@@ -117,12 +117,13 @@ def map(fn: Callable[[float], float]) -> Callable[[Iterable[float]], Iterable[fl
         A function that takes a list, applies `fn` to each element, and returns a
          new list
     """
-    raise NotImplementedError("Need to include this file from past assignment.")
-
+    def mapped_fn(ls: Iterable[float]) -> Iterable[float]:
+        return [fn(x) for x in ls]
+    return mapped_fn
 
 def negList(ls: Iterable[float]) -> Iterable[float]:
     "Use `map` and `neg` to negate each element in `ls`"
-    return map(lambda x: neg(x), ls)
+    return map(lambda x: neg(x))(ls)
 
 def zipWith(
     fn: Callable[[float, float], float]
@@ -140,12 +141,14 @@ def zipWith(
          applying fn(x, y) on each pair of elements.
 
     """
-    raise NotImplementedError("Need to include this file from past assignment.")
+    def zipper_fn(ls1: Iterable[float], ls2: Iterable[float]) -> Iterable[float]:
+        return [fn(x, y) for x, y in zip(ls1, ls2)]
+    return zipper_fn
 
 
 def addLists(ls1: Iterable[float], ls2: Iterable[float]) -> Iterable[float]:
     "Add the elements of `ls1` and `ls2` using `zipWith` and `add`"
-    return map(lambda x, y: add(x, y), ls1, ls2)
+    return zipWith(add)(ls1, ls2)
 
 
 def reduce(
@@ -163,14 +166,18 @@ def reduce(
          $x_1 \ldots x_n$ and computes the reduction :math:`fn(x_3, fn(x_2,
          fn(x_1, x_0)))`
     """
-    raise NotImplementedError("Need to include this file from past assignment.")
-
+    def reducer(ls: Iterable[float]) -> float:
+        acc = start
+        for x in ls:
+            acc = fn(acc, x)
+        return acc
+    return reducer
 
 def sum(ls: Iterable[float]) -> float:
     "Sum up a list using `reduce` and `add`."
-    return reduce(lambda x, y: add(x, y), ls, 0)
+    return reduce(lambda x, y: add(x, y), 0)(ls)
 
 
 def prod(ls: Iterable[float]) -> float:
     "Product of a list using `reduce` and `mul`."
-    return reduce(lambda x, y: mul(x, y), ls, 1)
+    return reduce(lambda x, y: mul(x, y), 1)(ls)
