@@ -16,7 +16,7 @@ def mul(x: float, y: float) -> float:
 
 def id(x: float) -> float:
     "$f(x) = x$"
-    return input
+    return x
 
 def add(x: float, y: float) -> float:
     "$f(x, y) = x + y$"
