@@ -163,8 +163,9 @@ class Scalar:
         assert h.last_fn is not None
         assert h.ctx is not None
 
-        # TODO: Implement for Task 1.3.
-        raise NotImplementedError("Need to implement for Task 1.3")
+        return [
+            (val, Mul.apply(d_output, central_difference(h.last_fn.apply, *h.inputs, arg=idx))) for idx, val in enumerate(h.inputs)
+        ]
 
     def backward(self, d_output: Optional[float] = None) -> None:
         """
