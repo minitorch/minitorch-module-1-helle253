@@ -3,6 +3,8 @@ from typing import Any, Iterable, List, Tuple
 
 from typing_extensions import Protocol
 
+from minitorch.operators import add, neg, inv, mul
+
 # ## Task 1.1
 # Central Difference calculation
 
@@ -27,7 +29,9 @@ def central_difference(f: Any, *vals: Any, arg: int = 0, epsilon: float = 1e-6) 
     forward_vals = list(vals)
     backward_vals[arg] = vals[arg] - epsilon
     forward_vals[arg] = vals[arg] + epsilon
-    return (f(*forward_vals) - f(*backward_vals)) / (2 * epsilon)
+    numerator = add(f(*forward_vals), neg(f(*backward_vals)))
+    denominator = mul(epsilon, 2)
+    return mul(numerator, inv(denominator))
 
 
 variable_count = 1
