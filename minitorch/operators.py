@@ -24,7 +24,7 @@ def add(x: float, y: float) -> float:
 
 def neg(x: float) -> float:
     "$f(x) = -x$"
-    return -1 * x
+    return -1.0 * x
 
 def lt(x: float, y: float) -> float:
     "$f(x) =$ 1.0 if x is less than y else 0.0"
@@ -65,7 +65,7 @@ def relu(x: float) -> float:
 
     (See https://en.wikipedia.org/wiki/Rectifier_(neural_networks) .)
     """
-    return x if x > 0 else 0
+    return x if x > 0 else 0.0
 
 EPS = 1e-6
 
