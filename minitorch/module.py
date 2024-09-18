@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from functools import reduce
 from typing import Any, Dict, Optional, Sequence, Tuple
 
 
@@ -31,11 +32,15 @@ class Module:
 
     def train(self) -> None:
         "Set the mode of this module and all descendent modules to `train`."
-        raise NotImplementedError("Need to include this file from past assignment.")
+        self.training = True
+        for module in self.modules():
+            module.train()
 
     def eval(self) -> None:
         "Set the mode of this module and all descendent modules to `eval`."
-        raise NotImplementedError("Need to include this file from past assignment.")
+        self.training = False
+        for module in self.modules():
+            module.eval()
 
     def named_parameters(self) -> Sequence[Tuple[str, Parameter]]:
         """
@@ -45,11 +50,21 @@ class Module:
         Returns:
             The name and `Parameter` of each ancestor parameter.
         """
-        raise NotImplementedError("Need to include this file from past assignment.")
+        parameters = list(self._parameters.items())
+
+        for module in self._modules.items():
+            child_parameters = module[1].named_parameters()
+            for parameter in child_parameters:
+                parameters.append((f"{module[0]}.{parameter[0]}", parameter[1]))
+        return parameters
 
     def parameters(self) -> Sequence[Parameter]:
         "Enumerate over all the parameters of this module and its descendents."
-        raise NotImplementedError("Need to include this file from past assignment.")
+        module_parameters = map(lambda x: x.parameters(), self.modules())
+        parameters = list(self._parameters.values())
+
+        return parameters + reduce(lambda x, y: y + x, module_parameters, [])
+
 
     def add_parameter(self, k: str, v: Any) -> Parameter:
         """
