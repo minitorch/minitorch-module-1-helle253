@@ -103,12 +103,13 @@ class Mul(ScalarFunction):
 
     @staticmethod
     def forward(ctx: Context, a: float, b: float) -> float:
+        ctx.save_for_backward(a,b)
         return operators.mul(a, b)
 
     @staticmethod
     def backward(ctx: Context, d_output: float) -> Tuple[float, float]:
-        # TODO: Implement for Task 1.4.
-        raise NotImplementedError("Need to implement for Task 1.4")
+        (a,b) = ctx.saved_values
+        return operators.mul(b, d_output), operators.mul(a, d_output)
 
 
 class Inv(ScalarFunction):
@@ -116,13 +117,13 @@ class Inv(ScalarFunction):
 
     @staticmethod
     def forward(ctx: Context, a: float) -> float:
+        ctx.save_for_backward(a)
         return operators.inv(a)
 
     @staticmethod
     def backward(ctx: Context, d_output: float) -> float:
-        # TODO: Implement for Task 1.4.
-        raise NotImplementedError("Need to implement for Task 1.4")
-
+        (a,) = ctx.saved_values
+        return operators.mul(-1.0, operators.mul(d_output, operators.inv(operators.mul(a, a))))
 
 class Neg(ScalarFunction):
     "Negation function"
@@ -133,8 +134,7 @@ class Neg(ScalarFunction):
 
     @staticmethod
     def backward(ctx: Context, d_output: float) -> float:
-        # TODO: Implement for Task 1.4.
-        raise NotImplementedError("Need to implement for Task 1.4")
+        return operators.mul(-1.0, d_output)
 
 
 class Sigmoid(ScalarFunction):
