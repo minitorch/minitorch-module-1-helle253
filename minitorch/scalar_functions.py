@@ -142,13 +142,15 @@ class Sigmoid(ScalarFunction):
 
     @staticmethod
     def forward(ctx: Context, a: float) -> float:
+        ctx.save_for_backward(a)
         return operators.sigmoid(a)
 
     @staticmethod
     def backward(ctx: Context, d_output: float) -> float:
-        # TODO: Implement for Task 1.4.
-        raise NotImplementedError("Need to implement for Task 1.4")
-
+        (a,) = ctx.saved_values
+        sigmoid_val = operators.sigmoid(a)
+        derivative = operators.mul(sigmoid_val, operators.add(1.0, operators.neg(sigmoid_val)))
+        return operators.mul(d_output, derivative)
 
 class ReLU(ScalarFunction):
     "ReLU function"
