@@ -157,13 +157,14 @@ class ReLU(ScalarFunction):
 
     @staticmethod
     def forward(ctx: Context, a: float) -> float:
+        ctx.save_for_backward(a)
         return operators.relu(a)
 
     @staticmethod
     def backward(ctx: Context, d_output: float) -> float:
-        # TODO: Implement for Task 1.4.
-        raise NotImplementedError("Need to implement for Task 1.4")
+        (a,) = ctx.saved_values
 
+        return operators.mul(operators.lt(0.0, a), d_output)
 
 class Exp(ScalarFunction):
     "Exp function"
